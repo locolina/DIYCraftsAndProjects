@@ -1,8 +1,9 @@
 ﻿using DIYCraftsAndProjectsMVC.Mapper;
 using DIYCraftsAndProjectsMVC.Models;
 using DIYCraftsAndProjectsMVC.Models.BLModel;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+
 
 namespace DIYCraftsAndProjectsMVC.Controllers
 {
@@ -50,7 +51,9 @@ namespace DIYCraftsAndProjectsMVC.Controllers
         // GET: AccountController/Edit/5
         public ActionResult Register()
         {
-            ViewBag.Countries = _context.Countries;
+            var countries = _context.Countries.ToList();
+
+            ViewBag.Countries = new SelectList(countries, "CountryId", "CountryName");
 
             return View();
         }

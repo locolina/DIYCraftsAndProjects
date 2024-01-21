@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace DIYCraftsAndProjectsMVC.Models;
 
@@ -11,8 +12,6 @@ public partial class Post
 
     public bool Public { get; set; }
 
-    public Guid? ContentId { get; set; }
-
     public DateTime? DatePosted { get; set; }
 
     public DateTime? DateDeleted { get; set; }
@@ -21,11 +20,15 @@ public partial class Post
 
     public decimal? Score { get; set; }
 
+    public string? Title { get; set; }
+
+    public string? FileType { get; set; }
+
+    public byte[]? Content { get; set; }
+
     public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
     public virtual ICollection<PostScore> PostScores { get; set; } = new List<PostScore>();
-
-    public virtual ICollection<UploadedFile> UploadedFiles { get; set; } = new List<UploadedFile>();
 
     public virtual User User { get; set; } = null!;
 }

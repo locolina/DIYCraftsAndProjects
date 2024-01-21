@@ -31,8 +31,6 @@ public partial class CraftsAndProjectsDbContext : DbContext
 
     public virtual DbSet<TypeOfUser> TypeOfUsers { get; set; }
 
-    public virtual DbSet<UploadedFile> UploadedFiles { get; set; }
-
     public virtual DbSet<User> Users { get; set; }
 
     public virtual DbSet<UserFollowUser> UserFollowUsers { get; set; }
@@ -69,7 +67,7 @@ public partial class CraftsAndProjectsDbContext : DbContext
             entity.HasOne(d => d.Post).WithMany(p => p.Comments)
                 .HasForeignKey(d => d.PostId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__comment__post_id__4BAC3F29");
+                .HasConstraintName("FK__comment__post_id__05D8E0BE");
 
             entity.HasOne(d => d.User).WithMany(p => p.Comments)
                 .HasForeignKey(d => d.UserId)
@@ -123,29 +121,36 @@ public partial class CraftsAndProjectsDbContext : DbContext
 
         modelBuilder.Entity<Post>(entity =>
         {
-            entity.HasKey(e => e.PostId).HasName("PK__post__3ED787660499AC07");
+            entity.HasKey(e => e.PostId).HasName("PK__post__3ED7876671156C79");
 
             entity.ToTable("post");
 
             entity.Property(e => e.PostId).HasColumnName("post_id");
-            entity.Property(e => e.ContentId).HasColumnName("content_id");
+            entity.Property(e => e.Content).HasColumnName("content");
             entity.Property(e => e.DateDeleted)
                 .HasColumnType("datetime")
                 .HasColumnName("date_deleted");
             entity.Property(e => e.DatePosted)
+                .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime")
                 .HasColumnName("date_posted");
+            entity.Property(e => e.FileType)
+                .HasMaxLength(255)
+                .HasColumnName("file_type");
             entity.Property(e => e.Public).HasColumnName("public");
             entity.Property(e => e.Score)
                 .HasColumnType("decimal(18, 0)")
                 .HasColumnName("score");
+            entity.Property(e => e.Title)
+                .HasMaxLength(255)
+                .HasColumnName("title");
             entity.Property(e => e.UserId).HasColumnName("user_id");
             entity.Property(e => e.Views).HasColumnName("views");
 
             entity.HasOne(d => d.User).WithMany(p => p.Posts)
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__post__user_id__412EB0B6");
+                .HasConstraintName("FK__post__user_id__02FC7413");
         });
 
         modelBuilder.Entity<PostScore>(entity =>
@@ -162,7 +167,7 @@ public partial class CraftsAndProjectsDbContext : DbContext
             entity.HasOne(d => d.Post).WithMany(p => p.PostScores)
                 .HasForeignKey(d => d.PostId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__post_scor__post___440B1D61");
+                .HasConstraintName("FK__post_scor__post___03F0984C");
 
             entity.HasOne(d => d.User).WithMany(p => p.PostScores)
                 .HasForeignKey(d => d.UserId)
@@ -226,27 +231,6 @@ public partial class CraftsAndProjectsDbContext : DbContext
             entity.Property(e => e.TypeName)
                 .HasMaxLength(255)
                 .HasColumnName("type_name");
-        });
-
-        modelBuilder.Entity<UploadedFile>(entity =>
-        {
-            entity.HasKey(e => e.IdUploadedFile).HasName("PK__uploaded__57CD244D1D11CB4D");
-
-            entity.ToTable("uploaded_file");
-
-            entity.Property(e => e.IdUploadedFile).HasColumnName("id_uploaded_file");
-            entity.Property(e => e.FileContent).HasColumnName("file_content");
-            entity.Property(e => e.FileName)
-                .HasMaxLength(50)
-                .HasColumnName("file_name");
-            entity.Property(e => e.FileType)
-                .HasMaxLength(20)
-                .HasColumnName("file_type");
-            entity.Property(e => e.PostId).HasColumnName("post_id");
-
-            entity.HasOne(d => d.Post).WithMany(p => p.UploadedFiles)
-                .HasForeignKey(d => d.PostId)
-                .HasConstraintName("FK__uploaded___post___6FE99F9F");
         });
 
         modelBuilder.Entity<User>(entity =>
